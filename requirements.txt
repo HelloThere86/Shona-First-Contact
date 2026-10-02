@@ -1,0 +1,2 @@
+# Development installation in editable mode
+-e .[dev]

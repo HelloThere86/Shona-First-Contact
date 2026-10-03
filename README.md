@@ -680,7 +680,7 @@ Update the Roadmap section to reflect that Milestone 0.1 is complete:
 
 - [x] **Rocky 0.01 — Foundation**: Package structure, pytest configuration, src/ layout.
 - [x] **Rocky 0.1 — Vocabulary Engine**: Shona-English vocabulary management, entry validation, bidirectional lookup, atomic JSON persistence.
-- [ ] **Rocky 0.2 — Lexical Analysis & Morphology**: Shona noun classes, prefixes, and tokenization.
+- [x] **Rocky 0.2 — Interactive Vocabulary CLI**: Terminal-based menu interface, bidirectional query commands, auto-load/save, destructive action confirmation, headless test harness.
 - [ ] **Rocky 0.3 — Audio Engine & Phonetics**: Audio capture, playback, and phonetic representation.
 - [ ] **Rocky 0.4 — Interactive Tutor & Memory**: Spaced repetition and adaptive learning loop.
 - [ ] **Rocky 0.5 — Graphical User Interface**: Desktop application interface.

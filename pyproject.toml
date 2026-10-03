@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rocky"
-version = "0.0.1"
+version = "0.2.0"
 description = "Foundation and modular toolkit for Shona language interaction and learning."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -27,6 +27,9 @@ dependencies = []
 dev = [
     "pytest>=7.4.0",
 ]
+
+[project.scripts]
+rocky = "rocky.ui.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

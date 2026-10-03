@@ -1,6 +1,6 @@
 # Rocky Architecture & Repository Layout
 
-This document describes the design and boundaries established in **Rocky 0.01 — Foundation** and **Rocky 0.1 — Vocabulary Engine**.
+This document describes the design and boundaries established in the Rocky project.
 
 ## Directory Structure
 
@@ -11,7 +11,7 @@ This document describes the design and boundaries established in **Rocky 0.01 �
   * `language/`: Shona linguistic utilities, tokenizer hooks, morphosyntax rules, and vocabulary engine.
   * `translation/`: Alignment and translation orchestration.
   * `learning/`: Spaced repetition, user adaptation, and feedback mechanisms.
-  * `ui/`: User interface components and presentation boundaries.
+  * `ui/`: User interface components and presentation boundaries (CLI, menus, formatting).
 
 * `data/`
   Data storage organized by processing lifecycle:
@@ -47,43 +47,26 @@ The vocabulary engine lives inside `rocky.language` and provides decoupled, modu
 
 3. **`JsonVocabularyStorage` (`storage.py`)**:
    * Manages reading and writing data to JSON files.
-   * Employs atomic write operations (`tempfile` + `os.replace` + `os.fsync`) so an interrupted or failed write never corrupts an existing file.
+   * Employs atomic write operations (`tempfile` + `os.replace` + `os.fsync`) so an interrupted write never corrupts an existing file.
    * Validates schema and catches malformed JSON with descriptive `StorageError` exceptions.
 
 4. **`exceptions.py`**:
    * Defines explicit exception hierarchies (`VocabularyError`, `ValidationError`, `WordNotFoundError`, `DuplicateWordError`, `StorageError`).
 
-### Linguistic Considerations & Known Limitations (0.1)
-* **Single Primary Meaning**: Shona words frequently have multiple nuanced meanings depending on tone, noun class prefix, and context. Rocky 0.1 explicitly supports one primary English translation per Shona entry.
-* **No Grammatical Analysis**: Rocky 0.1 does not perform morphological decomposition, agglutinative prefix analysis, or tone recognition. Those will be added in subsequent milestones.
+---
 
-### Usage Example
+## Rocky 0.2: Interactive Vocabulary CLI
 
-```python
-from pathlib import Path
-from rocky.language import VocabularyManager, WordNotFoundError
+The CLI lives inside `rocky.ui.cli` and acts as the presentation boundary for terminal interaction:
 
-# 1. Initialize manager
-vocab = VocabularyManager()
+1. **Separation of Concerns**:
+   * The CLI relies entirely on `VocabularyManager` for in-memory operations and `JsonVocabularyStorage` for persistence.
+   * No business logic, collection filtering, or file serialization algorithms are implemented in `cli.py`.
 
-# 2. Add words
-vocab.add("mvura", "water")
-vocab.add("mukaka", "milk")
-vocab.add("chikafu", "food")
+2. **Testability via Inversion of Control**:
+   * `VocabularyCLI` accepts injection of `input_func` and `output_func`.
+   * Unit tests run completely headless without monkeypatching global terminal streams or blocking on manual input.
 
-# 3. Direct lookup
-print(vocab.get_english("mvura"))  # -> "water"
-print(vocab.get_shona("milk"))      # -> "mukaka"
-
-# 4. Membership & update
-if "chikafu" in vocab:
-    vocab.update("chikafu", "nourishment")
-
-# 5. Atomic persistence
-vocab_path = Path("data/examples/my_vocab.json")
-vocab.save_to_file(vocab_path)
-
-# 6. Reloading
-new_vocab = VocabularyManager()
-new_vocab.load_from_file(vocab_path)
-print(len(new_vocab))               # -> 3
+3. **Defensive Interaction Flow**:
+   * Destructive actions (word deletion) require explicit confirmation.
+   * File operations catch custom `StorageError` exceptions and display actionable user diagnostics rather than raw stack traces.

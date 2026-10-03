@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "count": 6,
+  "entries": [
+    {
+      "shona": "mvura",
+      "english": "water"
+    },
+    {
+      "shona": "mukaka",
+      "english": "milk"
+    },
+    {
+      "shona": "chikafu",
+      "english": "food"
+    },
+    {
+      "shona": "imba",
+      "english": "house"
+    },
+    {
+      "shona": "munhu",
+      "english": "person"
+    },
+    {
+      "shona": "imbwa",
+      "english": "dog"
+    }
+  ]
+}

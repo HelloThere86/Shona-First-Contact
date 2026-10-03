@@ -70,3 +70,31 @@ The CLI lives inside `rocky.ui.cli` and acts as the presentation boundary for te
 3. **Defensive Interaction Flow**:
    * Destructive actions (word deletion) require explicit confirmation.
    * File operations catch custom `StorageError` exceptions and display actionable user diagnostics rather than raw stack traces.
+
+---
+
+## Rocky 0.3: Text Processing Engine
+
+The text-processing engine lives in `rocky.language.text` and provides modular preprocessing independent of vocabulary management and the presentation layer:
+
+1. **Normalization (`normalize_text`)**:
+   * Trims whitespace and collapses repeated spaces, tabs, and newlines.
+   * Separates punctuation that directly abuts word boundaries without breaking intra-word hyphens (`mangwanani-ngwanani`) or apostrophes (`nd'ani`).
+   * Provides optional case normalization while preserving the original raw string.
+
+2. **Tokenization (`tokenize`)**:
+   * Extracts word tokens and distinct punctuation tokens using Unicode-compliant regex patterns.
+   * Emits immutable `Token` dataclasses capturing `text`, `normalized`, `is_punctuation`, `start_char`, and `end_char`.
+   * Preserves multi-character punctuation (e.g., ellipses `...`).
+
+3. **Sentence Segmentation (`segment_sentences`)**:
+   * Splits multi-sentence paragraphs on terminal punctuation (`.`, `!`, `?`).
+   * Handles repeated punctuation sequences (e.g., `?!`, `...`) without emitting empty sentence fragments.
+
+4. **Pipeline Orchestrator (`process_text` & `TextProcessor`)**:
+   * Returns a structured `ProcessedText` object containing parsed `Sentence` and `Token` collections with document-level character offsets.
+
+### Known Limitations of Rule-Based Segmentation
+* **Abbreviations and Honorifics**: Titles (e.g. `Dr.`, `Prof.`) or abbreviations (e.g. `e.g.`, `i.e.`) containing periods may be incorrectly segmented as sentence endings.
+* **Numbers with Decimals**: Decimal points (e.g. `3.14`) are preserved by lookaround assertions, but complex numerical notations or currency codes followed immediately by text may require future contextual refinement.
+* **Dialogue Quotations**: Sentences ending in nested quotation marks following terminal punctuation are grouped with the preceding sentence.

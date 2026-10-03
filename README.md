@@ -681,6 +681,30 @@ Update the Roadmap section to reflect that Milestone 0.1 is complete:
 - [x] **Rocky 0.01 — Foundation**: Package structure, pytest configuration, src/ layout.
 - [x] **Rocky 0.1 — Vocabulary Engine**: Shona-English vocabulary management, entry validation, bidirectional lookup, atomic JSON persistence.
 - [x] **Rocky 0.2 — Interactive Vocabulary CLI**: Terminal-based menu interface, bidirectional query commands, auto-load/save, destructive action confirmation, headless test harness.
-- [ ] **Rocky 0.3 — Audio Engine & Phonetics**: Audio capture, playback, and phonetic representation.
+- [x] **Rocky 0.3 — Text Processing Engine**: Text normalization, sentence boundary segmentation, token extraction with character spans, Unicode and contraction preservation, rule-based text pipeline.
 - [ ] **Rocky 0.4 — Interactive Tutor & Memory**: Spaced repetition and adaptive learning loop.
 - [ ] **Rocky 0.5 — Graphical User Interface**: Desktop application interface.
+
+### Text Processing Engine Usage (Python API)
+
+Rocky 0.3 provides programmatic text processing:
+
+```python
+from rocky.language import process_text, TextProcessor
+
+# Functional interface
+doc = process_text("Mhoro, shamwari! Uri sei nhasi?")
+print(doc.words())
+# Output: ['Mhoro', 'shamwari', 'Uri', 'sei', 'nhasi']
+
+print(doc.token_texts())
+# Output: ['Mhoro', ',', 'shamwari', '!', 'Uri', 'sei', 'nhasi', '?']
+
+for sentence in doc.sentences:
+    print(f"Sentence: {sentence.text} (tokens: {len(sentence.tokens)})")
+
+# Class interface
+processor = TextProcessor(default_lowercase=True)
+normalized = processor.normalize("  MHORO   SHAMWARI!  ")
+print(normalized)
+# Output: 'mhoro shamwari!'

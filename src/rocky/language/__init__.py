@@ -1,4 +1,4 @@
-"""Linguistic representations, vocabulary management, and orthographic resources."""
+"""Linguistic representations, vocabulary management, and text processing."""
 
 from rocky.language.entry import VocabularyEntry
 from rocky.language.exceptions import (
@@ -11,6 +11,16 @@ from rocky.language.exceptions import (
 )
 from rocky.language.manager import VocabularyManager
 from rocky.language.storage import JsonVocabularyStorage
+from rocky.language.text import (
+    ProcessedText,
+    Sentence,
+    TextProcessor,
+    Token,
+    normalize_text,
+    process_text,
+    segment_sentences,
+    tokenize,
+)
 
 __all__ = [
     "VocabularyEntry",
@@ -22,4 +32,12 @@ __all__ = [
     "DuplicateWordError",
     "StorageError",
     "StorageFileNotFoundError",
+    "Token",
+    "Sentence",
+    "ProcessedText",
+    "TextProcessor",
+    "normalize_text",
+    "segment_sentences",
+    "tokenize",
+    "process_text",
 ]

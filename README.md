@@ -31,8 +31,6 @@ The system should evolve from a simple rule-based prototype into increasingly so
 
 The important principle is:
 
-> **Do not build the final system first. Build the system that can eventually become the final system.**
-
 ---
 
 # Development Philosophy
@@ -58,14 +56,6 @@ Development will therefore emphasize:
 * Speech processing
 * UI/UX engineering
 * System design
-
-AI coding agents may be used during development.
-
-However:
-
-> **The AI may write code. The developer must understand what gets merged.**
-
-Generated code should be reviewed, tested, understood, and integrated deliberately rather than blindly accepted.
 
 ---
 
@@ -682,7 +672,7 @@ Update the Roadmap section to reflect that Milestone 0.1 is complete:
 - [x] **Rocky 0.1 — Vocabulary Engine**: Shona-English vocabulary management, entry validation, bidirectional lookup, atomic JSON persistence.
 - [x] **Rocky 0.2 — Interactive Vocabulary CLI**: Terminal-based menu interface, bidirectional query commands, auto-load/save, destructive action confirmation, headless test harness.
 - [x] **Rocky 0.3 — Text Processing Engine**: Text normalization, sentence boundary segmentation, token extraction with character spans, Unicode and contraction preservation, rule-based text pipeline.
-- [ ] **Rocky 0.4 — Interactive Tutor & Memory**: Spaced repetition and adaptive learning loop.
+- [x] **Rocky 0.4 — Shona Linguistic Analysis**: Noun class registry (Classes 1-18), confirmed vs. tentative certainty levels, data-driven morphological rules, documented word-form relationships, non-hallucinating analyzer.
 - [ ] **Rocky 0.5 — Graphical User Interface**: Desktop application interface.
 
 ### Text Processing Engine Usage (Python API)

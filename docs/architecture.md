@@ -98,3 +98,46 @@ The text-processing engine lives in `rocky.language.text` and provides modular p
 * **Abbreviations and Honorifics**: Titles (e.g. `Dr.`, `Prof.`) or abbreviations (e.g. `e.g.`, `i.e.`) containing periods may be incorrectly segmented as sentence endings.
 * **Numbers with Decimals**: Decimal points (e.g. `3.14`) are preserved by lookaround assertions, but complex numerical notations or currency codes followed immediately by text may require future contextual refinement.
 * **Dialogue Quotations**: Sentences ending in nested quotation marks following terminal punctuation are grouped with the preceding sentence.
+
+---
+
+## Rocky 0.4: Shona Linguistic Analysis
+
+The linguistic analysis layer lives in `rocky.language.analysis` and provides extensible noun-class handling and morphological inspection:
+
+1. **Separation of Linguistic Data and Analysis Logic**:
+   * Data models (`NounClass`, `WordFormRelationship`, `MorphologicalRule`) and registries (`NounClassRegistry`, `RuleRegistry`) are decoupled from `ShonaLinguisticAnalyzer`.
+   * Future grammatical rules and dialectal exceptions can be added via data registries without modifying analyzer source code.
+
+2. **Certainty Levels & No Hallucinated Analysis**:
+   * `CONFIRMED`: Word forms verified in documented lexical datasets.
+   * `TENTATIVE`: General prefix-rule match with unverified stem or ambiguous noun class.
+   * `UNRESOLVED`: Returned explicitly when no rule matches. The analyzer does not chop off arbitrary prefixes or invent root stems.
+
+3. **Word-Form Relationships vs. Confirmed Morphological Decomposition**:
+   * Storing that two words are related (e.g., `munhu` and `vanhu`) does not require claiming that all words follow identical agglutinative concatenation. Where decomposition has not been verified, `stem` is stored as `None`.
+
+4. **Extending Noun Classes and Rules**:
+   ```python
+   from rocky.language import NounClass, NumberCategory, MorphologicalRule
+
+   # Adding a noun class
+   new_class = NounClass(
+       identifier="1a",
+       prefix="Ø",
+       number=NumberCategory.SINGULAR,
+       paired_class_id="2a",
+       description="Kinship terms and proper names",
+   )
+   registry.register(new_class)
+
+   # Adding a morphological rule
+   new_rule = MorphologicalRule(
+       rule_id="cl11_to_cl10_ru_dzi",
+       description="Transform Class 11 ru- to Class 10 dzi-",
+       source_prefix="ru",
+       target_prefix="dzi",
+       source_class_id="11",
+       target_class_id="10",
+   )
+   rule_registry.register(new_rule)

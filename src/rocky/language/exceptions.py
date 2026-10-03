@@ -1,4 +1,9 @@
-"""Custom exception hierarchy for the Rocky vocabulary engine."""
+"""Custom exception hierarchy for Rocky language and vocabulary components."""
+
+
+# ============================================================================
+# Vocabulary Exceptions (Rocky 0.1)
+# ============================================================================
 
 
 class VocabularyError(Exception):
@@ -23,3 +28,28 @@ class StorageError(VocabularyError, OSError):
 
 class StorageFileNotFoundError(StorageError, FileNotFoundError):
     """Raised when the specified vocabulary storage file does not exist."""
+
+
+# ============================================================================
+# Linguistic Analysis Exceptions (Rocky 0.4)
+# ============================================================================
+
+
+class LinguisticError(VocabularyError):
+    """Base exception for all linguistic analysis and registry errors."""
+
+
+class DuplicateNounClassError(LinguisticError, ValueError):
+    """Raised when registering a noun class with an identifier that already exists."""
+
+
+class InvalidNounClassError(LinguisticError, ValueError):
+    """Raised when a noun class definition is incomplete, malformed, or missing."""
+
+
+class DuplicateRuleError(LinguisticError, ValueError):
+    """Raised when registering a morphological rule with an ID that already exists."""
+
+
+class InvalidRuleError(LinguisticError, ValueError):
+    """Raised when a morphological rule definition is malformed or invalid."""

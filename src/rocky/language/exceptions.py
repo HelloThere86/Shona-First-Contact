@@ -53,3 +53,24 @@ class DuplicateRuleError(LinguisticError, ValueError):
 
 class InvalidRuleError(LinguisticError, ValueError):
     """Raised when a morphological rule definition is malformed or invalid."""
+
+
+# ============================================================================
+# Concord Agreement Exceptions (Rocky 0.5)
+# ============================================================================
+
+
+class ConcordError(LinguisticError):
+    """Base exception for all concord agreement and validation errors."""
+
+
+class DuplicateConcordError(ConcordError, ValueError):
+    """Raised when registering a concord record that already exists for a class and category."""
+
+
+class InvalidConcordError(ConcordError, ValueError):
+    """Raised when a concord record definition is incomplete or malformed."""
+
+
+class UnsupportedCategoryError(ConcordError, ValueError):
+    """Raised when an unrecognized or unsupported grammatical concord category is requested."""

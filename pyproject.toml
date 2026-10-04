@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rocky"
-version = "0.4.0"
+version = "0.5.0"
 description = "Foundation and modular toolkit for Shona language interaction and learning."
 readme = "README.md"
 requires-python = ">=3.11"

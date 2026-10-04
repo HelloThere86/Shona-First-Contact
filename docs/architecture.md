@@ -141,3 +141,26 @@ The linguistic analysis layer lives in `rocky.language.analysis` and provides ex
        target_class_id="10",
    )
    rule_registry.register(new_rule)
+
+---
+
+## Rocky 0.5: Concord Agreement and Linguistic Validation
+
+The concord agreement layer lives in `rocky.language.analysis` and models grammatical agreement (chivakashure chechirevo / chisazitasingwi) between controlling nouns and dependent syntactic elements:
+
+1. **Separation of Agreement Categories**:
+   * Agreement forms vary according to syntactic function. `ConcordCategory` distinguishes `SUBJECT`, `ADJECTIVE`, `POSSESSIVE`, and `OBJECT` agreements.
+   * `ConcordRecord` models individual concord markers paired with bibliographical source documentation (e.g. Fortune 1984).
+
+2. **Integration with Noun-Class Analysis**:
+   * `ShonaConcordAnalyzer` consumes the noun-class outputs from `ShonaLinguisticAnalyzer` rather than re-parsing noun morphology.
+   * Certainty levels are strictly maintained: confirmed nouns yield `CONFIRMED` concords, while ambiguous or derived nouns yield `TENTATIVE` concords marked with `is_ambiguous=True`. Unresolved nouns yield `UNRESOLVED` concords with explicit explanations.
+
+3. **Syntactic Agreement Validation**:
+   * `validate_agreement(noun, target, category)` evaluates whether an inflected verb or modifier satisfies agreement with the subject noun.
+   * `validate_token_agreement` directly evaluates sequences of `Token` instances emitted by Rocky 0.3.
+
+### Linguistic Assumptions and Validation Status
+* **Grammatical Sources**: Concord markers are sourced from Fortune (1980/1984), Hannan (1984), and Dale (1972).
+* **Phonological Coalescence**: Vowel-initial verb stems (e.g., `a-` + `-enda` -> `akaenda` / `anoenda`) require tense/aspect vowel coalescence rules that will be expanded in future verbal milestones.
+* **Dialectal Variation**: Dialectal variations (e.g. Manyika, Karanga, Korekore) in honorific concords (such as Class 1a taking Class 2 `va-` honorific agreement) are documented in record notes.

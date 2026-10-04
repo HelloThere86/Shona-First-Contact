@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "count": 6,
+  "count": 7,
   "entries": [
     {
       "shona": "mvura",
@@ -25,6 +25,10 @@
     {
       "shona": "imbwa",
       "english": "dog"
+    },
+    {
+      "shona": "hesi",
+      "english": "hi"
     }
   ]
 }

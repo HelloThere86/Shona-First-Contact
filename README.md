@@ -673,7 +673,7 @@ Update the Roadmap section to reflect that Milestone 0.1 is complete:
 - [x] **Rocky 0.2 — Interactive Vocabulary CLI**: Terminal-based menu interface, bidirectional query commands, auto-load/save, destructive action confirmation, headless test harness.
 - [x] **Rocky 0.3 — Text Processing Engine**: Text normalization, sentence boundary segmentation, token extraction with character spans, Unicode and contraction preservation, rule-based text pipeline.
 - [x] **Rocky 0.4 — Shona Linguistic Analysis**: Noun class registry (Classes 1-18), confirmed vs. tentative certainty levels, data-driven morphological rules, documented word-form relationships, non-hallucinating analyzer.
-- [ ] **Rocky 0.5 — Graphical User Interface**: Desktop application interface.
+- [x] **Rocky 0.5 — Concord Agreement & Linguistic Validation**: Grammatical concord models across subject, adjective, and possessive categories; data-driven concord registry with linguistic citations; syntactic agreement validation; ambiguity and uncertainty preservation.
 
 ### Text Processing Engine Usage (Python API)
 
@@ -698,3 +698,27 @@ processor = TextProcessor(default_lowercase=True)
 normalized = processor.normalize("  MHORO   SHAMWARI!  ")
 print(normalized)
 # Output: 'mhoro shamwari!'
+
+### Concord Agreement Usage (Python API)
+
+Rocky 0.5 provides concord agreement projection and validation:
+
+```python
+from rocky.language import ShonaConcordAnalyzer, ConcordCategory
+
+analyzer = ShonaConcordAnalyzer()
+
+# 1. Project expected subject concord
+analyses = analyzer.analyze_agreement("munhu", ConcordCategory.SUBJECT, target_stem="nofara")
+print(analyses[0].concord_prefix)    # 'a'
+print(analyses[0].agreement_form)    # 'anofara'
+print(analyses[0].certainty.value)   # 'confirmed'
+
+# 2. Validate syntactic agreement
+v_valid = analyzer.validate_agreement("chikafu", "chinonaka", ConcordCategory.SUBJECT)[0]
+print(v_valid.is_valid)              # True
+print(v_valid.matched_concord)       # 'chi'
+
+v_invalid = analyzer.validate_agreement("munhu", "vanofara", ConcordCategory.SUBJECT)[0]
+print(v_invalid.is_valid)            # False
+print(v_invalid.expected_concords)   # ('a',)

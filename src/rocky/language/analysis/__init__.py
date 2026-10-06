@@ -1,5 +1,6 @@
-"""Shona linguistic analysis and concord agreement subpackage."""
+"""Shona linguistic analysis, concord agreement, and linguistic knowledge validation."""
 
+from rocky.language.analysis.agreement_validator import ShonaAgreementValidator
 from rocky.language.analysis.analyzer import ShonaLinguisticAnalyzer
 from rocky.language.analysis.concord_analyzer import ShonaConcordAnalyzer
 from rocky.language.analysis.concord_data import build_default_concord_registry
@@ -14,6 +15,20 @@ from rocky.language.analysis.data import (
     build_default_noun_class_registry,
     build_default_rule_registry,
     get_default_word_relationships,
+)
+from rocky.language.analysis.knowledge_base import (
+    LinguisticKnowledgeBase,
+    build_default_knowledge_base,
+)
+from rocky.language.analysis.knowledge_models import (
+    AdjectiveMutationRecord,
+    AttestationStatus,
+    DetailedAgreementValidation,
+    EvidenceSourceType,
+    LinguisticEvidence,
+    StemGrammaticalCategory,
+    StemRecord,
+    ValidationVerdict,
 )
 from rocky.language.analysis.models import (
     CertaintyLevel,
@@ -48,4 +63,16 @@ __all__ = [
     "ConcordRegistry",
     "ShonaConcordAnalyzer",
     "build_default_concord_registry",
+    # Rocky 0.6 linguistic knowledge and enhanced validation
+    "EvidenceSourceType",
+    "AttestationStatus",
+    "LinguisticEvidence",
+    "StemGrammaticalCategory",
+    "StemRecord",
+    "AdjectiveMutationRecord",
+    "ValidationVerdict",
+    "DetailedAgreementValidation",
+    "LinguisticKnowledgeBase",
+    "ShonaAgreementValidator",
+    "build_default_knowledge_base",
 ]

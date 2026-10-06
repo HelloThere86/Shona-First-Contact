@@ -74,7 +74,6 @@ class ShonaConcordAnalyzer:
                 f"Expected ConcordCategory enum, received {type(category).__name__}."
             )
 
-        # Leverage existing Rocky 0.4 linguistic analyzer without duplicating logic
         noun_analyses = self.linguistic_analyzer.analyze_word(cleaned_noun)
         clean_stem = target_stem.strip().lstrip("-").lower() if target_stem else None
 
@@ -127,14 +126,12 @@ class ShonaConcordAnalyzer:
                 continue
 
             # Case 3: Confirmed vs. Tentative projection
-            # A concord projection can only be CONFIRMED if the underlying noun class is CONFIRMED
             projection_certainty = (
                 CertaintyLevel.CONFIRMED
                 if n_analysis.certainty == CertaintyLevel.CONFIRMED and concord_record.certainty == CertaintyLevel.CONFIRMED
                 else CertaintyLevel.TENTATIVE
             )
 
-            # Synthesize hypothetical agreement form if a stem was supplied
             agreement_form: str | None = None
             if clean_stem:
                 agreement_form = f"{concord_record.concord_prefix}{clean_stem}"
@@ -176,13 +173,7 @@ class ShonaConcordAnalyzer:
     ) -> list[AgreementValidationResult]:
         """Validate whether a dependent word satisfies concord agreement with a head noun.
 
-        Args:
-            noun_word: Controlling noun/subject string.
-            target_word: Dependent verb, adjective, or possessive form string.
-            category: Grammatical concord category to validate.
-
-        Returns:
-            List of AgreementValidationResult records for each candidate interpretation.
+        Preserved for full backward compatibility with Rocky 0.5.
         """
         if not isinstance(target_word, str):
             raise TypeError(f"Target word must be a string, received {type(target_word).__name__}.")
@@ -216,7 +207,6 @@ class ShonaConcordAnalyzer:
             expected_prefix = analysis.concord_prefix
             expected_tuple = (expected_prefix,)
 
-            # Check if target word begins with the required concord prefix
             if cleaned_target.startswith(expected_prefix):
                 validation_results.append(
                     AgreementValidationResult(

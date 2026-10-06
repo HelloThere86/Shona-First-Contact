@@ -674,6 +674,7 @@ Update the Roadmap section to reflect that Milestone 0.1 is complete:
 - [x] **Rocky 0.3 — Text Processing Engine**: Text normalization, sentence boundary segmentation, token extraction with character spans, Unicode and contraction preservation, rule-based text pipeline.
 - [x] **Rocky 0.4 — Shona Linguistic Analysis**: Noun class registry (Classes 1-18), confirmed vs. tentative certainty levels, data-driven morphological rules, documented word-form relationships, non-hallucinating analyzer.
 - [x] **Rocky 0.5 — Concord Agreement & Linguistic Validation**: Grammatical concord models across subject, adjective, and possessive categories; data-driven concord registry with linguistic citations; syntactic agreement validation; ambiguity and uncertainty preservation.
+- [x] **Rocky 0.6 — Linguistic Knowledge & Validation**: Traceable linguistic evidence models, explicit attestation status, lexical stem registry, documented Class 9/10 adjectival consonant mutation, granular validation verdicts distinguishing unverified stems from invalid forms.
 
 ### Text Processing Engine Usage (Python API)
 
@@ -722,3 +723,27 @@ print(v_valid.matched_concord)       # 'chi'
 v_invalid = analyzer.validate_agreement("munhu", "vanofara", ConcordCategory.SUBJECT)[0]
 print(v_invalid.is_valid)            # False
 print(v_invalid.expected_concords)   # ('a',)
+
+### Linguistic Knowledge & Detailed Validation Usage (Python API)
+
+Rocky 0.6 provides stem decomposition, evidence tracking, and detailed agreement validation:
+
+```python
+from rocky.language import ShonaAgreementValidator, ConcordCategory, ValidationVerdict
+
+validator = ShonaAgreementValidator()
+
+# 1. Confirmed match with recognized stem
+v1 = validator.validate("munhu", "anofara", ConcordCategory.SUBJECT)[0]
+print(v1.verdict.value)        # 'confirmed_match'
+print(v1.extracted_stem)       # 'fara'
+print(v1.evidence.citation)    # 'Hannan (1984), Standard Shona Dictionary...'
+
+# 2. Unverified stem (prefix matches, stem unknown; NOT marked as invalid)
+v2 = validator.validate("munhu", "anobhururuka", ConcordCategory.SUBJECT)[0]
+print(v2.verdict.value)        # 'unverified_stem_match'
+
+# 3. Class 9/10 adjectival consonant mutation
+v3 = validator.validate("imba", "huru", ConcordCategory.ADJECTIVE)[0]
+print(v3.verdict.value)        # 'confirmed_match'
+print(v3.extracted_stem)       # 'kuru'

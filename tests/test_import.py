@@ -9,7 +9,7 @@ def test_rocky_version():
     """Verify rocky package imports and has a valid version string."""
     assert hasattr(rocky, "__version__")
     assert isinstance(rocky.__version__, str)
-    assert rocky.__version__ == "0.5.0"
+    assert rocky.__version__ == "0.6.0"
 
 
 @pytest.mark.parametrize(

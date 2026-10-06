@@ -164,3 +164,30 @@ The concord agreement layer lives in `rocky.language.analysis` and models gramma
 * **Grammatical Sources**: Concord markers are sourced from Fortune (1980/1984), Hannan (1984), and Dale (1972).
 * **Phonological Coalescence**: Vowel-initial verb stems (e.g., `a-` + `-enda` -> `akaenda` / `anoenda`) require tense/aspect vowel coalescence rules that will be expanded in future verbal milestones.
 * **Dialectal Variation**: Dialectal variations (e.g. Manyika, Karanga, Korekore) in honorific concords (such as Class 1a taking Class 2 `va-` honorific agreement) are documented in record notes.
+
+---
+
+## Rocky 0.6: Linguistic Knowledge and Validation
+
+Rocky 0.6 introduces a controlled linguistic knowledge and validation layer in `rocky.language.analysis`:
+
+1. **Explicit Provenance and Attestation (`LinguisticEvidence`)**:
+   * All linguistic data records retain explicit evidence (`source_type`, `citation`, `attestation_status`, `dialect_scope`).
+   * `AttestationStatus` requires explicit assignment (`VERIFIED`, `PROVISIONAL`, `CONTESTED`) with no default fallbacks.
+
+2. **Refined Validation Classification (`ValidationVerdict`)**:
+   * Replaces binary matching with six explicit states:
+     * `CONFIRMED_MATCH`: Concord prefix matches and the stem is verified in the knowledge base.
+     * `UNVERIFIED_STEM_MATCH`: Concord prefix matches, but the stem is unrecognized (distinguished from invalid forms).
+     * `AMBIGUOUS_MATCH`: Matches one candidate interpretation of an ambiguous noun.
+     * `CONCORD_MISMATCH`: Prefix present contradicts the controlling noun class.
+     * `UNSUPPORTED_SYNTACTIC_FORM`: Target cannot yield a viable stem.
+     * `UNRESOLVED_CONTROLLER`: Head noun has an unresolved noun class.
+
+3. **Constrained Adjectival Mutation Rules**:
+   * Initial consonant mutations in Classes 9 and 10 (*-kuru* $\rightarrow$ *huru*, *-tete* $\rightarrow$ *nhete*, *-refu* $\rightarrow$ *ndefu*, *-pamhi* $\rightarrow$ *mhamhi*, *-diki* $\rightarrow$ *ndiki*, *-chena* $\rightarrow$ *chena*) are supported with citations to Fortune (1984).
+
+4. **Validation Guards and Category Scoping**:
+   * **Mutation Guard**: In Classes 9 and 10, adjectives that require documented consonant mutation (e.g., *-kuru* -> *huru*) cannot bypass mutation via ordinary `i-` prefixation (*imba ikuru* evaluates to `CONCORD_MISMATCH`).
+   * **Category Scoping**: Categories without formal stem validation engines (`POSSESSIVE`, `OBJECT`) explicitly return `UNSUPPORTED_SYNTACTIC_FORM` rather than falling through to verb validation.
+   * **Diagnostic Conservatism**: Unverified residue (e.g., `munhu aporo`) is marked as `UNVERIFIED_STEM_MATCH`, and diagnostics explicitly clarify that prefix matching alone does not assert that the residue is a verb stem.
